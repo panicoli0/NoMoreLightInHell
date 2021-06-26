@@ -13,7 +13,7 @@ public class Rock : MonoBehaviour
 
     private IEnumerator OnCollisionEnter(Collision collision)
     {
-        print(transform.position);
+        //print(transform.position);
         OnHitPos = this.transform;
         if (gameObject.activeInHierarchy)
         {

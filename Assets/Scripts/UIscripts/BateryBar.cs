@@ -14,7 +14,7 @@ public class BateryBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxBattery = batteryAmount.intensity; 
+        maxBattery = batteryAmount.intensity;
     }
 
     // Update is called once per frame
