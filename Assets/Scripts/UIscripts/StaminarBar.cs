@@ -10,6 +10,8 @@ public class StaminarBar : MonoBehaviour
     [SerializeField] Image staminaFillImage;
     [SerializeField] float maxStamina = 1.0f;
     [SerializeField] float staminaDecay = 1.0f;
+    [SerializeField] float recoveryTime = 2.0f;
+    [SerializeField] AudioSource footStepSound;
 
     RigidbodyFirstPersonController instance;
     float currentStamina;
@@ -33,6 +35,8 @@ public class StaminarBar : MonoBehaviour
         else
         {
             IncreaseStamina();
+            footStepSound.enabled = false;
+
         }
     }
 
@@ -42,8 +46,12 @@ public class StaminarBar : MonoBehaviour
         if (staminaFillImage.fillAmount <= minStamina)
         {
             instance.movementSettings.RunMultiplier = 1.0f;
+            footStepSound.enabled = false;
             //todo: add tiredAudio
-            return;
+        }
+        else
+        {
+            footStepSound.enabled = true;
         }
         staminaDecremental = staminaDecay * Time.deltaTime;
         staminaFillImage.fillAmount -= staminaDecremental;
@@ -57,7 +65,7 @@ public class StaminarBar : MonoBehaviour
             //todo: add tiredAudio
             return;
         }
-        staminaIncremental = (staminaDecay / 2) * Time.deltaTime;
+        staminaIncremental = (staminaDecay / recoveryTime) * Time.deltaTime;
         staminaFillImage.fillAmount += staminaIncremental;
     }
 }

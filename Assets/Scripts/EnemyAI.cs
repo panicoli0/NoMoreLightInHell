@@ -7,12 +7,13 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public Transform target;
-    public Transform rock;
+    public Transform hitPos;
     [SerializeField] float turnSpeed = 5.0f;
 
     public float chaceRange = 5.0f;
 
     private bool isProveked = false;
+    bool isPersuing = false;
 
     NavMeshAgent navMeshAgent;
     float distanceToTarget = Mathf.Infinity;
@@ -39,7 +40,7 @@ public class EnemyAI : MonoBehaviour
             navMeshAgent.enabled = false;
         }
 
-        //BackToDefaultPos();
+        StartCoroutine(PersueDetector());
 
         distanceToTarget = Vector3.Distance(target.position, transform.position);
 
@@ -54,6 +55,16 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    private IEnumerator PersueDetector()
+    {
+        if (isPersuing && navMeshAgent.remainingDistance <= 1.5f)
+        {
+            GetComponent<Animator>().SetTrigger("Idle");
+        }
+
+        yield return new WaitForSeconds(2.0f);
+    }
+
     public void OnDamageTaken()
     {
         IsProveked = true;
@@ -62,7 +73,7 @@ public class EnemyAI : MonoBehaviour
     private void EngageTarget()
     {
         FaceTarget();
-        //DetectTarget();
+
         if (distanceToTarget >= navMeshAgent.stoppingDistance)
         {
             ChaseTarget();
@@ -82,42 +93,25 @@ public class EnemyAI : MonoBehaviour
     {
         GetComponent<Animator>().SetBool("Attack", false);
         GetComponent<Animator>().SetTrigger("Move");
-
         navMeshAgent.SetDestination(target.position);
     }
 
-    public void RocksDetector()
+    public void RocksDetector(Transform hitPos)
     {
-        rock = FindObjectOfType<Rock>().OnHitPos;
-        FaceTarget();
-        GetComponent<Animator>().SetTrigger("Move");
-        navMeshAgent.SetDestination(rock.transform.position);
-        //if (navMeshAgent.isStopped)
-        //{
-        //    GetComponent<Animator>().SetTrigger("Idle");
-        //}
-        
-        ////BackToDefaultPos();
-        //distanceToRock = Vector3.Distance(rock.transform.position, transform.position);
-        //if (distanceToRock <= 7)
-        //{
-            
-        //    //BackToDefaultPos();
-        //}
-        //GetComponent<Animator>().SetTrigger("Idle");
+        distanceToRock = Vector3.Distance(hitPos.position, transform.position);
+        //target = hitPos.transform;
+
+        if (hitPos != null)
+        {
+            isPersuing = true;
+            GetComponent<Animator>().SetTrigger("Move");
+            navMeshAgent.SetDestination(hitPos.position);
+        }
+        else if (distanceToRock <= navMeshAgent.stoppingDistance)
+        {
+            isPersuing = false;
+        }
     }
-
-    //private void BackToDefaultPos()
-    //{
-    //    if (rock == null)
-    //    {
-    //        navMeshAgent.SetDestination(currentPos);
-    //        FaceTarget();
-    //        GetComponent<Animator>().SetTrigger("Move");
-    //    }
-
-    //    GetComponent<Animator>().SetBool("Rest", true);
-    //}
 
     void OnDrawGizmosSelected()
     {

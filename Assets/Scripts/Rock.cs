@@ -5,22 +5,28 @@ using UnityEngine;
 public class Rock : MonoBehaviour
 {
     private Transform onHitPos;
-    //[SerializeField] float area = 5.0f;
 
     EnemyAI zombie;
+    float impactRange = 3.0f;
 
     public Transform OnHitPos { get => onHitPos; set => onHitPos = value; }
 
-    private IEnumerator OnCollisionEnter(Collision collision)
+    private void Start()
     {
-        //print(transform.position);
+        zombie = FindObjectOfType<EnemyAI>();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
         OnHitPos = this.transform;
-        if (gameObject.activeInHierarchy)
+        zombie.RocksDetector(onHitPos);
+
+        var distanceToZombie = Vector3.Distance(zombie.transform.position, transform.position);
+
+        if (distanceToZombie <= zombie.chaceRange)
         {
-            zombie = FindObjectOfType<EnemyAI>();
-            zombie.RocksDetector();
+            zombie.RocksDetector(onHitPos);
         }
-        //Destroy(gameObject, 5f);
-        yield break;
+        Destroy(gameObject, 5.0f);
     }
 }
