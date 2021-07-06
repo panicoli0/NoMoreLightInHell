@@ -12,6 +12,7 @@ public class StaminarBar : MonoBehaviour
     [SerializeField] float staminaDecay = 1.0f;
     [SerializeField] float recoveryTime = 2.0f;
     [SerializeField] AudioSource footStepSound;
+    [SerializeField] AudioSource strongBreathSound;
 
     RigidbodyFirstPersonController instance;
     float currentStamina;
@@ -47,7 +48,7 @@ public class StaminarBar : MonoBehaviour
         {
             instance.movementSettings.RunMultiplier = 1.0f;
             footStepSound.enabled = false;
-            //todo: add tiredAudio
+            strongBreathSound.Play();
         }
         else
         {
