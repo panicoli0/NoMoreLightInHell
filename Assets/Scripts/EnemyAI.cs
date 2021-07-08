@@ -8,21 +8,18 @@ public class EnemyAI : MonoBehaviour
 {
     public Transform target;
     public Transform hitPos;
+    public float chaceRange = 5.0f;
+    public bool IsProveked { get => isProveked; set => isProveked = value; }
+
     [SerializeField] float turnSpeed = 5.0f;
 
-    public float chaceRange = 5.0f;
-
+    NavMeshAgent navMeshAgent;
     private bool isProveked = false;
     bool isPersuing = false;
-
-    NavMeshAgent navMeshAgent;
     float distanceToTarget = Mathf.Infinity;
     float distanceToRock = Mathf.Infinity;
     EnemyHealth health;
     Vector3 currentPos;
-
-    public bool IsProveked { get => isProveked; set => isProveked = value; }
-
 
     // Start is called before the first frame update
     void Awake()
@@ -99,7 +96,6 @@ public class EnemyAI : MonoBehaviour
     public void RocksDetector(Transform hitPos)
     {
         distanceToRock = Vector3.Distance(hitPos.position, transform.position);
-        //target = hitPos.transform;
 
         if (hitPos != null)
         {

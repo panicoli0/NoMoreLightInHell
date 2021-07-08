@@ -37,7 +37,6 @@ public class StaminarBar : MonoBehaviour
         {
             IncreaseStamina();
             footStepSound.enabled = false;
-
         }
     }
 

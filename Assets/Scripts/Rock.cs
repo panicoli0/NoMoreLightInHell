@@ -4,22 +4,40 @@ using UnityEngine;
 
 public class Rock : MonoBehaviour
 {
-    private Transform onHitPos;
+    public float hitRange = 5.0f;
 
-    EnemyAI zombie;
+    Transform onHitPos;
+    EnemyAI zombie = null;
+    float distanceToClosestZombie = Mathf.Infinity;
     float impactRange = 3.0f;
 
     public Transform OnHitPos { get => onHitPos; set => onHitPos = value; }
 
-    private void Start()
+    private void Awake()
     {
-        zombie = FindObjectOfType<EnemyAI>();
+        FindNearestZombie();
+    }
+
+    private void FindNearestZombie()
+    {
+        EnemyAI[] zombies = FindObjectsOfType<EnemyAI>();
+
+        foreach (EnemyAI currentZombie in zombies)
+        {
+            float distanceToZombie = (currentZombie.transform.position - this.transform.position).sqrMagnitude;
+            if (distanceToZombie < distanceToClosestZombie)
+            {
+                distanceToClosestZombie = distanceToZombie;
+                zombie = currentZombie;
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         OnHitPos = this.transform;
-        zombie.RocksDetector(onHitPos);
+        //todo: Add RockHitSound
+            //todo: Create a AudioListener ??
 
         var distanceToZombie = Vector3.Distance(zombie.transform.position, transform.position);
 
