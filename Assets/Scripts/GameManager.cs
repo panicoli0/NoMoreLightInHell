@@ -23,14 +23,21 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        AmmoUI();
+        //AmmoUI();
         HPUI();
     }
 
-    private void AmmoUI()
-    {
-        ammoUI.GetComponent<Text>().text = batery.intensity.ToString();
-    }
+    //private void AmmoUI()
+    //{
+    //    if (ammoUI != null)
+    //    {
+    //        ammoUI.GetComponent<Text>().text = batery.intensity.ToString();
+    //    }
+    //    else
+    //    {
+    //        return;
+    //    }
+    //}
 
     private void HPUI()
     {

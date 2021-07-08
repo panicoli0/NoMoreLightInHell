@@ -110,3 +110,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoSlot: {fileID: 0}
   ammoType: 0
+  ammoAmountIncremental: 25

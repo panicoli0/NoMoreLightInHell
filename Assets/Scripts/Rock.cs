@@ -4,23 +4,47 @@ using UnityEngine;
 
 public class Rock : MonoBehaviour
 {
-    private Transform onHitPos;
-    //[SerializeField] float area = 5.0f;
+    public float hitRange = 5.0f;
 
-    EnemyAI zombie;
+    Transform onHitPos;
+    EnemyAI zombie = null;
+    float distanceToClosestZombie = Mathf.Infinity;
+    float impactRange = 3.0f;
 
     public Transform OnHitPos { get => onHitPos; set => onHitPos = value; }
 
-    private IEnumerator OnCollisionEnter(Collision collision)
+    private void Awake()
     {
-        print(transform.position);
-        OnHitPos = this.transform;
-        if (gameObject.activeInHierarchy)
+        FindNearestZombie();
+    }
+
+    private void FindNearestZombie()
+    {
+        EnemyAI[] zombies = FindObjectsOfType<EnemyAI>();
+
+        foreach (EnemyAI currentZombie in zombies)
         {
-            zombie = FindObjectOfType<EnemyAI>();
-            zombie.RocksDetector();
+            float distanceToZombie = (currentZombie.transform.position - this.transform.position).sqrMagnitude;
+            if (distanceToZombie < distanceToClosestZombie)
+            {
+                distanceToClosestZombie = distanceToZombie;
+                zombie = currentZombie;
+            }
         }
-        //Destroy(gameObject, 5f);
-        yield break;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        OnHitPos = this.transform;
+        //todo: Add RockHitSound
+            //todo: Create a AudioListener ??
+
+        var distanceToZombie = Vector3.Distance(zombie.transform.position, transform.position);
+
+        if (distanceToZombie <= zombie.chaceRange)
+        {
+            zombie.RocksDetector(onHitPos);
+        }
+        Destroy(gameObject, 5.0f);
     }
 }

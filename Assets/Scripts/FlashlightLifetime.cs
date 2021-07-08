@@ -8,8 +8,6 @@ public class FlashlightLifetime : MonoBehaviour
     [SerializeField] float angleDecay = 1f;
     [SerializeField] float intensityDecay = 1f;
     [SerializeField] float minimunAngle = 40f;
-    //[SerializeField] Ammo ammoSlot;
-    //[SerializeField] AmmoType ammoType;
 
     float angleDecremental;
     float ammoDecremental;
@@ -32,7 +30,6 @@ public class FlashlightLifetime : MonoBehaviour
 
     private void DecreaseAngle()
     {
-
         if (FlashLight.spotAngle <= minimunAngle)
         {
             return;
