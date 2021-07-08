@@ -6,7 +6,7 @@ public class LighterSystem : MonoBehaviour
 {
 
     
-    [SerializeField] float lightIntensity = 1f;
+    [SerializeField] float lightIntensity = 3f;
     [SerializeField] float minimunIntensity = 0.1f;
     [SerializeField] float intensityDecay = 1;
     [SerializeField] ParticleSystem flame;
